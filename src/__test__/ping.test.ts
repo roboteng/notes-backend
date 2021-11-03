@@ -1,12 +1,12 @@
 import request from "superagent";
 import supertest from "supertest";
 import express from "express";
-import Server from "../Server";
+import makeServer from "../Server";
 
 describe("Given a fresh Server", () => {
   let server: express.Express;
   beforeEach(() => {
-    server = Server();
+    server = makeServer();
   });
   describe("When a request is sent to /", () => {
     let pingResponse: request.Response;

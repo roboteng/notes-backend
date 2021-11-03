@@ -1,6 +1,6 @@
-import Server from "./Server";
+import makeServer from "./Server";
 
 const port = 1741;
-const server = Server();
+const server = makeServer();
 
 server.listen(port);

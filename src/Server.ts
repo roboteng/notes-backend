@@ -1,6 +1,6 @@
 import express from "express";
 
-function Server() {
+function makeServer() {
   const app = express();
   app.use(express.json());
   app.use("/", (req, res) => {
@@ -9,4 +9,4 @@ function Server() {
   return app;
 }
 
-export default Server;
+export default makeServer;
