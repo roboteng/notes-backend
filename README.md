@@ -21,3 +21,17 @@ To run all test files through Jest, and generate a coverage report, run
 ### Running the Server
 
 To start the server, run `npm start`.
+
+## Routes
+
+### `/`
+
+#### GET
+
+##### Request parameters
+
+None
+
+##### Response
+
+`"ok"`
