@@ -1,11 +1,25 @@
 {
   "name": "notes-backend",
   "version": "1.0.0",
-  "description": "Provides a RESTful API to manange notes",
-  "main": "index.js",
+  "description": "A RESTful API to manange notes",
+  "main": "index.ts",
   "scripts": {
+    "lint": "eslint .",
+    "start": "ts-node src/index.ts",
     "test": "jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.1.0",
+    "jest": "^27.3.1"
+  },
+  "dependencies": {
+    "ts-node": "^10.4.0"
+  }
 }
