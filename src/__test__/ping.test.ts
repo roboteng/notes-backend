@@ -1,9 +1,10 @@
 import request from "superagent";
 import supertest from "supertest";
+import express from "express";
 import Server from "../Server";
 
 describe("Given a fresh Server", () => {
-  let server;
+  let server: express.Express;
   beforeEach(() => {
     server = Server();
   });
