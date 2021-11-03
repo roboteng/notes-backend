@@ -10,7 +10,8 @@ A RESTful API to manange notes
 
 Run `npm install` or `npm i` to download dependencies.
 
-All scripts can be found in the [package.json], but some are highlighted here
+All scripts can be found in the [package.json](./package.json), but some are
+highlighted here
 
 ### Testing
 
