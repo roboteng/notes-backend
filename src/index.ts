@@ -1,3 +1,6 @@
-const message = "Hello world";
+import Server from "./Server";
 
-export default message;
+const port = 1741;
+const server = Server();
+
+server.listen(port);
