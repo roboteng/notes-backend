@@ -54,4 +54,18 @@ Registers a new user, and logs that user in
 
 ##### Response
 
-`"ok"`
+201
+
+```json
+{
+  success: bool,
+}
+```
+
+and a cookie with a session id
+
+```json
+{
+  notesSession: string,
+}
+```
