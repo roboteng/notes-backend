@@ -29,5 +29,18 @@ describe("Given a fresh Server", () => {
     test("Then the server should respond with 201", () => {
       expect(postResponse.status).toBe(201);
     });
+    describe("When a POST is missing username and sent to /register", () => {
+      let postResponse: request.Response;
+      beforeEach(async () => {
+        postResponse = await supertest(server).post("/register").query({
+          user: "user",
+          email: "email@mail.com",
+          password: "StrongPassword1234"
+        });
+      });
+      test("Then the server should respond with 201", () => {
+        expect(postResponse.status).toBe(400);
+      });
+    });
   });
 });
