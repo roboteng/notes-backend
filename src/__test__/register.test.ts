@@ -30,8 +30,8 @@ describe("Given a fresh Server", () => {
       expect(postResponse.status).toBe(201);
     });
     test("Then the response should have a cookie with a sessionID", () => {
-      console.log(postResponse.headers);
-      expect(postResponse.headers["set-cookie"][0]).toMatch(/session=Hello;/);
+      console.log(postResponse.headers["set-cookie"][0]);
+      expect(postResponse.headers["set-cookie"][0]).toMatch(/session=[0-9a-f]{128};/);
     });
     describe("When a POST is missing username and sent to /register", () => {
       let postResponse: request.Response;
