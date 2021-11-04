@@ -9,12 +9,25 @@ describe("Given a fresh Server", () => {
     server = makeServer();
   });
   describe("When a blank POST is sent to /register", () => {
-    let pingResponse: request.Response;
+    let postResponse: request.Response;
     beforeEach(async () => {
-      pingResponse = await supertest(server).post("/register");
+      postResponse = await supertest(server).post("/register");
     });
     test("Then the server should respond with 400", () => {
-      expect(pingResponse.status).toBe(400);
+      expect(postResponse.status).toBe(400);
+    });
+  });
+  describe("When a valid POST is sent to /register", () => {
+    let postResponse: request.Response;
+    beforeEach(async () => {
+      postResponse = await supertest(server).post("/register").query({
+        username: "user",
+        email: "email@mail.com",
+        password: "StrongPassword1234"
+      });
+    });
+    test("Then the server should respond with 201", () => {
+      expect(postResponse.status).toBe(201);
     });
   });
 });
