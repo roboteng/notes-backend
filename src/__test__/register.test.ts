@@ -46,6 +46,9 @@ describe("Given a fresh Server", () => {
       test("Then the response should have a 401 status", () => {
         expect(postResponse2.status).toBe(401);
       });
+      test("Then the response contains a helpful message", () => {
+        expect(postResponse2.body.reason).toBe("That username is already in use");
+      });
     });
     describe("When a POST is missing username and sent to /register", () => {
       let postResponse: request.Response;

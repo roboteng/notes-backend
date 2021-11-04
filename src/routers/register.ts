@@ -32,7 +32,7 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
   router.post("/", async (req: Request<unknown, unknown, unknown, RegisterQuery>, res) => {
     if (requestIsValid(req)) {
       if (await db.userExists(req.query.username)) {
-        res.status(401).send();
+        res.status(401).json({ reason: "That username is already in use" });
       } else {
         // TODO: login, so that we aren't sending the hashed password as the session id
         const { hash, salt } = genPassword(req.query.password);
