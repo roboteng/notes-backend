@@ -42,5 +42,31 @@ describe("Given a fresh Server", () => {
         expect(postResponse.status).toBe(400);
       });
     });
+    describe("When a POST is missing password and sent to /register", () => {
+      let postResponse: request.Response;
+      beforeEach(async () => {
+        postResponse = await supertest(server).post("/register").query({
+          username: "user",
+          email: "email@mail.com",
+          pw: "StrongPassword1234"
+        });
+      });
+      test("Then the server should respond with 201", () => {
+        expect(postResponse.status).toBe(400);
+      });
+    });
+    describe("When a POST is missing password and sent to /register", () => {
+      let postResponse: request.Response;
+      beforeEach(async () => {
+        postResponse = await supertest(server).post("/register").query({
+          username: "user",
+          e: "email@mail.com",
+          password: "StrongPassword1234"
+        });
+      });
+      test("Then the server should respond with 201", () => {
+        expect(postResponse.status).toBe(400);
+      });
+    });
   });
 });

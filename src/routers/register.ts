@@ -1,7 +1,10 @@
 import { Router } from "express";
 
 function requestIsValid(req) {
-  return (Object.keys(req.query).length === 3) && req.query.username;
+  return (Object.keys(req.query).length === 3)
+    && req.query.username
+    && req.query.email
+    && req.query.password;
 }
 
 function RegisterRouter() {
