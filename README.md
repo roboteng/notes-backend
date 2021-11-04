@@ -28,9 +28,29 @@ To start the server, run `npm start`.
 
 #### GET
 
+Used to ping the server, not strcitly neccessary
+
 ##### Request parameters
 
 None
+
+##### Response
+
+`"ok"`
+
+### `/register`
+
+#### POST
+
+Registers a new user, and logs that user in
+
+##### Request parameters
+
+| Parameter | Type   |
+|-----------|--------|
+| username  | string |
+| email     | string |
+| password  | string |
 
 ##### Response
 
