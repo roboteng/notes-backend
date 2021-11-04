@@ -1,6 +1,5 @@
 import { Router, Request } from "express";
 import crypto from "crypto";
-import Database from "../database/interface";
 
 interface RegisterQuery {
   username: string,

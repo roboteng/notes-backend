@@ -1,12 +1,13 @@
 import express from "express";
-import Database from "./database/interface";
+import LoginRouter from "./routers/login";
 import RegisterRouter from "./routers/register";
 
-function makeServer<Key extends number | string>(db: Database<Key>) {
+function makeServer(db: Database<Key>) {
   const app = express();
   app.use(express.json());
 
   app.use("/register", RegisterRouter(db));
+  app.use("/login", LoginRouter(db));
 
   app.get("/", (req, res) => {
     res.send("ok");
