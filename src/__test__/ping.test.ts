@@ -2,11 +2,12 @@ import request from "superagent";
 import supertest from "supertest";
 import express from "express";
 import makeServer from "../Server";
+import InMemoryDB from "../database/InMemoryDB";
 
 describe("Given a fresh Server", () => {
   let server: express.Express;
   beforeEach(() => {
-    server = makeServer();
+    server = makeServer(InMemoryDB());
   });
   describe("When a request is sent to /", () => {
     let pingResponse: request.Response;

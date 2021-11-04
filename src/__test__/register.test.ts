@@ -2,11 +2,12 @@ import request from "superagent";
 import supertest from "supertest";
 import express from "express";
 import makeServer from "../Server";
+import InMemoryDB from "../database/InMemoryDB";
 
 describe("Given a fresh Server", () => {
   let server: express.Express;
   beforeEach(() => {
-    server = makeServer();
+    server = makeServer(InMemoryDB());
   });
   describe("When a blank POST is sent to /register", () => {
     let postResponse: request.Response;
@@ -32,6 +33,19 @@ describe("Given a fresh Server", () => {
     test("Then the response should have a cookie with a sessionID", () => {
       console.log(postResponse.headers["set-cookie"][0]);
       expect(postResponse.headers["set-cookie"][0]).toMatch(/session=[0-9a-f]{128};/);
+    });
+    describe("When another request comes with the same username", () => {
+      let postResponse2: request.Response;
+      beforeEach(async () => {
+        postResponse2 = await supertest(server).post("/register").query({
+          username: "user",
+          email: "email@mail.com",
+          password: "StrongPassword1234"
+        });
+      });
+      test("Then the response should have a 401 status", () => {
+        expect(postResponse2.status).toBe(401);
+      });
     });
     describe("When a POST is missing username and sent to /register", () => {
       let postResponse: request.Response;

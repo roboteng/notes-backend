@@ -1,5 +1,12 @@
-import { Router } from "express";
+import { Router, Request } from "express";
 import crypto from "crypto";
+import Database from "../database/interface";
+
+interface RegisterQuery {
+  username: string,
+  email: string,
+  password: string,
+}
 
 function requestIsValid(req) {
   return (Object.keys(req.query).length === 3)
@@ -20,12 +27,18 @@ function genPassword(password) {
   };
 }
 
-function RegisterRouter() {
+function RegisterRouter<Key extends number | string>(db: Database<Key>) {
   const router = Router();
-  router.post("/", (req, res) => {
+  router.post("/", async (req: Request<unknown, unknown, unknown, RegisterQuery>, res) => {
     if (requestIsValid(req)) {
-      const { hash } = genPassword(req.query.password);
-      res.status(201).cookie("session", hash).send();
+      if (await db.userExists(req.query.username)) {
+        res.status(401).send();
+      } else {
+        // TODO: login, so that we aren't sending the hashed password as the session id
+        const { hash, salt } = genPassword(req.query.password);
+        db.registerUser(req.query.username, hash, salt, req.query.email);
+        res.status(201).cookie("session", hash).send();
+      }
     } else {
       res.status(400).send();
     }
