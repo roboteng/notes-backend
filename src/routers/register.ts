@@ -11,7 +11,7 @@ function RegisterRouter() {
   const router = Router();
   router.post("/", (req, res) => {
     if (requestIsValid(req)) {
-      res.status(201).send();
+      res.status(201).cookie("session", "Hello").send();
     } else {
       res.status(400).send();
     }

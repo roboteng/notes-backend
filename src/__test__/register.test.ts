@@ -29,6 +29,10 @@ describe("Given a fresh Server", () => {
     test("Then the server should respond with 201", () => {
       expect(postResponse.status).toBe(201);
     });
+    test("Then the response should have a cookie with a sessionID", () => {
+      console.log(postResponse.headers);
+      expect(postResponse.headers["set-cookie"][0]).toMatch(/session=Hello;/);
+    });
     describe("When a POST is missing username and sent to /register", () => {
       let postResponse: request.Response;
       beforeEach(async () => {
@@ -55,7 +59,7 @@ describe("Given a fresh Server", () => {
         expect(postResponse.status).toBe(400);
       });
     });
-    describe("When a POST is missing password and sent to /register", () => {
+    describe("When a POST is missing email and sent to /register", () => {
       let postResponse: request.Response;
       beforeEach(async () => {
         postResponse = await supertest(server).post("/register").query({
