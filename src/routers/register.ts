@@ -8,14 +8,14 @@ interface RegisterQuery {
   password: string,
 }
 
-function requestIsValid(req) {
+function requestIsValid(req: Request<unknown, unknown, unknown, RegisterQuery>) {
   return (Object.keys(req.query).length === 3)
     && req.query.username
     && req.query.email
     && req.query.password;
 }
 
-function genPassword(password) {
+function genPassword(password: string) {
   const salt = crypto.randomBytes(32).toString("hex");
   const genHash = crypto
     .pbkdf2Sync(password, salt, 10000, 64, "sha512")
