@@ -18,12 +18,27 @@ describe("Given a fresh Server", () => {
       expect(postResponse.status).toBe(400);
     });
   });
-  describe("When a POST is made with an unknown sessionID", () => {
+  describe("When a POST is made with a valid unknown sessionID", () => {
     let logoutResponse: request.Response;
     beforeEach(async () => {
-      logoutResponse = await supertest(server).post("/logout");
+      const double = (x: string) => x + x;
+      const part = "0123456789abcdef";
+      logoutResponse = await supertest(server).post("/logout")
+        .set("Cookie", [`notes-session=${double(double(double(part)))};`]);
     });
-    xtest("Then the server should respond with 200", () => {
+    test("Then the server should respond with 200", () => {
+      expect(logoutResponse.statusCode).toBe(200);
+    });
+  });
+  describe("When a POST is made with a non-valid sessionID", () => {
+    let logoutResponse: request.Response;
+    beforeEach(async () => {
+      const double = (x: string) => x + x;
+      const part = "0123456789abcdef";
+      logoutResponse = await supertest(server).post("/logout")
+        .set("Cookie", [`notes-session=${double(double(double(part)))};`]);
+    });
+    test("Then the server should respond with 200", () => {
       expect(logoutResponse.statusCode).toBe(200);
     });
   });
