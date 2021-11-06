@@ -33,13 +33,12 @@ describe("Given a fresh Server", () => {
   describe("When a POST is made with a non-valid sessionID", () => {
     let logoutResponse: request.Response;
     beforeEach(async () => {
-      const double = (x: string) => x + x;
-      const part = "0123456789abcdef";
+      const part = "BadSession";
       logoutResponse = await supertest(server).post("/logout")
-        .set("Cookie", [`notes-session=${double(double(double(part)))};`]);
+        .set("Cookie", [`notes-session=${part};`]);
     });
     test("Then the server should respond with 200", () => {
-      expect(logoutResponse.statusCode).toBe(200);
+      expect(logoutResponse.statusCode).toBe(400);
     });
   });
 });

@@ -10,12 +10,6 @@ function makeServer(db: Database<number | string>) {
   app.use(express.json());
   app.use(cookieParer());
 
-  app.use((req, _, next) => {
-    if (Object.keys(req.cookies).length !== 0)
-      console.log(req.cookies);
-    next();
-  });
-
   app.use("/register", RegisterRouter(db));
   app.use("/login", LoginRouter(db));
   app.use("/logout", LogoutRouter());
