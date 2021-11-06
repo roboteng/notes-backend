@@ -4,18 +4,43 @@ import request from "superagent";
 import InMemoryDB from "../database/InMemoryDB";
 import makeServer from "../Server";
 
-describe("Given a fresh Server", () => {
+describe("Given a server with one user", () => {
   let server: express.Express;
-  beforeEach(() => {
+  let registerResponse: request.Response;
+  let logoutResponse: request.Response;
+  let sessionID: string;
+  beforeEach(async () => {
     server = makeServer(InMemoryDB());
-  });
-  describe("When a blank POST is sent to /login", () => {
-    let postResponse: request.Response;
-    beforeEach(async () => {
-      postResponse = await supertest(server).post("/login");
+    registerResponse = await supertest(server).post("/register").query({
+      username: "user",
+      email: "email@mail.com",
+      password: "StrongPassword1234"
     });
-    test("Then the server should respond with 400", () => {
-      expect(postResponse.status).toBe(400);
+    const cookie: string = registerResponse.headers["set-cookie"][0];
+    sessionID = cookie.match(/notes-session=([0-9a-f]{128});/)[1];
+    logoutResponse = await supertest(server)
+      .post("/logout")
+      .set("Cookie", [`notes-session=${sessionID};`,]);
+  });
+  describe("When an invalid request is sent", () => {
+    let loginResponse: request.Response;
+    beforeEach(async () => {
+      loginResponse = await supertest(server)
+        .post("/login");
+    });
+    test("Then the server responds with 400", () => {
+      expect(loginResponse.status).toBe(400);
+    });
+  });
+  describe("When a different user tries to log in", () => {
+    let loginResponse: request.Response;
+    beforeEach(async () => {
+      loginResponse = await supertest(server)
+        .post("/login")
+        .query({ username: "differentUser", password: "differentPassword" });
+    });
+    test("Then the server responds with 401", () => {
+      expect(loginResponse.status).toBe(401);
     });
   });
 });
