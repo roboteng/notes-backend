@@ -1,3 +1,5 @@
+import { Database } from "./interface";
+
 function InMemoryDB(): Database<number> {
   const users = [];
   return {

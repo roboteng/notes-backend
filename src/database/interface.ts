@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-declare interface Database<Key extends number | string> {
-  registerUser: (username: string, hash: string, salt: string, email: string) => Promise<Key>,
-  userExists: (username: string) => Promise<boolean>,
+export class Database<K extends Key> {
+  registerUser: (username: string, hash: string, salt: string, email: string) => Promise<K>;
+  userExists: (username: string) => Promise<boolean>;
 }
 
 declare type Key = number | string;
+
+export default "foo";
