@@ -4,7 +4,11 @@ function LogoutRouter() {
   const router = Router();
 
   router.post("/", (req, res) => {
-    res.status(400).send();
+    if (req.cookies["notes-session"]) {
+      res.status(200).send();
+    } else {
+      res.status(400).send();
+    }
   });
 
   return router;

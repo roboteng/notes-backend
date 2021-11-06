@@ -47,7 +47,9 @@ describe("Given a server with one logged in user", () => {
     let logoutResponse: request.Response;
     beforeEach(async () => {
       console.log(sessionID);
-      logoutResponse = await supertest(server).post("/logout");
+      logoutResponse = await supertest(server)
+        .post("/logout")
+        .set("Cookie", [`notes-session=${sessionID};`,]);
     });
     test("Then the user should be logged out", () => {
       expect(logoutResponse.status).toBe(200);
