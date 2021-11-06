@@ -5,7 +5,6 @@ function LogoutRouter() {
 
   router.post("/", (req, res) => {
     const session: string = req.cookies["notes-session"];
-    console.log(session);
     if (session && session.match(/[0-9a-f]{128}/)) {
       res.status(200).send();
     } else {

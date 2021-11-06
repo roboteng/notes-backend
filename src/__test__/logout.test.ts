@@ -60,7 +60,6 @@ describe("Given a server with one logged in user", () => {
   describe("When a request is made to /logout", () => {
     let logoutResponse: request.Response;
     beforeEach(async () => {
-      console.log(sessionID);
       logoutResponse = await supertest(server)
         .post("/logout")
         .set("Cookie", [`notes-session=${sessionID};`,]);
