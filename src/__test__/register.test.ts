@@ -31,8 +31,7 @@ describe("Given a fresh Server", () => {
       expect(postResponse.status).toBe(201);
     });
     test("Then the response should have a cookie with a sessionID", () => {
-      console.log(postResponse.headers["set-cookie"][0]);
-      expect(postResponse.headers["set-cookie"][0]).toMatch(/session=[0-9a-f]{128};/);
+      expect(postResponse.headers["set-cookie"][0]).toMatch(/notes-session=[0-9a-f]{128};/);
     });
     describe("When another request comes with the same username", () => {
       let postResponse2: request.Response;

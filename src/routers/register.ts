@@ -37,7 +37,7 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         // TODO: login, so that we aren't sending the hashed password as the session id
         const { hash, salt } = genPassword(req.query.password);
         db.registerUser(req.query.username, hash, salt, req.query.email);
-        res.status(201).cookie("session", hash).send();
+        res.status(201).cookie("notes-session", hash).send();
       }
     } else {
       res.status(400).send();
