@@ -7,7 +7,6 @@ import makeServer from "../Server";
 describe("Given a server with one user", () => {
   let server: express.Express;
   let registerResponse: request.Response;
-  let logoutResponse: request.Response;
   let sessionID: string;
   beforeEach(async () => {
     server = makeServer(InMemoryDB());
@@ -18,7 +17,7 @@ describe("Given a server with one user", () => {
     });
     const cookie: string = registerResponse.headers["set-cookie"][0];
     sessionID = cookie.match(/notes-session=([0-9a-f]{128});/)[1];
-    logoutResponse = await supertest(server)
+    await supertest(server)
       .post("/logout")
       .set("Cookie", [`notes-session=${sessionID};`,]);
   });
@@ -41,6 +40,17 @@ describe("Given a server with one user", () => {
     });
     test("Then the server responds with 401", () => {
       expect(loginResponse.status).toBe(401);
+    });
+  });
+  describe("When the user logs in with the right password", () => {
+    let loginResponse: request.Response;
+    beforeEach(async () => {
+      loginResponse = await supertest(server)
+        .post("/login")
+        .query({ username: "user", password: "StrongPassword1234" });
+    });
+    test("Then the server responds with 201", () => {
+      expect(loginResponse.status).toBe(201);
     });
   });
 });

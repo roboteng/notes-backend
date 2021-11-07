@@ -1,6 +1,8 @@
 import { Router, Request } from "express";
-import crypto from "crypto";
 import { Database } from "../database/interface";
+import randomHex from "../utils/randomHex";
+import createSession from "../utils/createSession";
+import hashPassword from "../utils/hashPassword";
 
 interface RegisterQuery {
   username: string,
@@ -15,18 +17,6 @@ function requestIsValid(req: Request<unknown, unknown, unknown, RegisterQuery>) 
     && req.query.password;
 }
 
-function genPassword(password: string) {
-  const salt = crypto.randomBytes(32).toString("hex");
-  const genHash = crypto
-    .pbkdf2Sync(password, salt, 10000, 64, "sha512")
-    .toString("hex");
-
-  return {
-    salt: salt,
-    hash: genHash,
-  };
-}
-
 function RegisterRouter<Key extends number | string>(db: Database<Key>) {
   const router = Router();
   router.post("/", async (req: Request<unknown, unknown, unknown, RegisterQuery>, res) => {
@@ -34,10 +24,11 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
       if (await db.userExists(req.query.username)) {
         res.status(401).json({ reason: "That username is already in use" });
       } else {
-        // TODO: login, so that we aren't sending the hashed password as the session id
-        const { hash, salt } = genPassword(req.query.password);
-        db.registerUser(req.query.username, hash, salt, req.query.email);
-        res.status(201).cookie("notes-session", hash).send();
+        const salt = randomHex(128);
+        const hash = hashPassword(req.query.password, salt);
+        const userId = await db.registerUser(req.query.username, hash, salt, req.query.email);
+        const sessionId = await createSession(db, userId);
+        res.status(201).cookie("notes-session", sessionId).send();
       }
     } else {
       res.status(400).send();
