@@ -1,7 +1,6 @@
 import { Router, Request } from "express";
 import { Database } from "../database/interface";
 import randomHex from "../utils/randomHex";
-import createSession from "../utils/createSession";
 import hashPassword from "../utils/hashPassword";
 
 interface RegisterQuery {
@@ -27,8 +26,8 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         const salt = randomHex(128);
         const hash = hashPassword(req.query.password, salt);
         const userId = await db.registerUser(req.query.username, hash, salt, req.query.email);
-        const sessionId = await createSession(db, userId);
-        res.status(201).cookie("notes-session", sessionId).send();
+        const user = await db.getUser(userId);
+        res.status(201).send(user);
       }
     } else {
       res.status(400).send();

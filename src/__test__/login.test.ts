@@ -1,30 +1,27 @@
 import express from "express";
-import supertest from "supertest";
+import supertest, { SuperAgentTest } from "supertest";
 import request from "superagent";
 import InMemoryDB from "../database/InMemoryDB";
 import makeServer from "../Server";
 
 describe("Given a server with one user", () => {
   let server: express.Express;
-  let registerResponse: request.Response;
-  let sessionID: string;
+  let agent: SuperAgentTest;
   beforeEach(async () => {
     server = makeServer(InMemoryDB());
-    registerResponse = await supertest(server).post("/register").query({
+    agent = supertest.agent(server);
+    await agent.post("/register").query({
       username: "user",
       email: "email@mail.com",
       password: "StrongPassword1234"
     });
-    const cookie: string = registerResponse.headers["set-cookie"][0];
-    sessionID = cookie.match(/notes-session=([0-9a-f]{128});/)[1];
-    await supertest(server)
-      .post("/logout")
-      .set("Cookie", [`notes-session=${sessionID};`,]);
+    await agent
+      .post("/logout");
   });
   describe("When an invalid request is sent", () => {
     let loginResponse: request.Response;
     beforeEach(async () => {
-      loginResponse = await supertest(server)
+      loginResponse = await agent
         .post("/login");
     });
     test("Then the server responds with 400", () => {
@@ -33,8 +30,10 @@ describe("Given a server with one user", () => {
   });
   describe("When a different user tries to log in", () => {
     let loginResponse: request.Response;
+    let otherAgent: SuperAgentTest;
     beforeEach(async () => {
-      loginResponse = await supertest(server)
+      otherAgent = supertest.agent(server);
+      loginResponse = await otherAgent
         .post("/login")
         .query({ username: "differentUser", password: "differentPassword" });
     });
@@ -45,7 +44,7 @@ describe("Given a server with one user", () => {
   describe("When the user logs in with the right password", () => {
     let loginResponse: request.Response;
     beforeEach(async () => {
-      loginResponse = await supertest(server)
+      loginResponse = await agent
         .post("/login")
         .query({ username: "user", password: "StrongPassword1234" });
     });

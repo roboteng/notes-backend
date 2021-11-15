@@ -6,13 +6,15 @@ import InMemoryDB from "../database/InMemoryDB";
 
 describe("Given a fresh Server", () => {
   let server: express.Express;
+  let agent: supertest.SuperAgentTest;
   beforeEach(() => {
     server = makeServer(InMemoryDB());
+    agent = supertest.agent(server);
   });
   describe("When a blank POST is sent to /register", () => {
     let postResponse: request.Response;
     beforeEach(async () => {
-      postResponse = await supertest(server).post("/register");
+      postResponse = await agent.post("/register");
     });
     test("Then the server should respond with 400", () => {
       expect(postResponse.status).toBe(400);
@@ -21,7 +23,7 @@ describe("Given a fresh Server", () => {
   describe("When a valid POST is sent to /register", () => {
     let postResponse: request.Response;
     beforeEach(async () => {
-      postResponse = await supertest(server).post("/register").query({
+      postResponse = await agent.post("/register").query({
         username: "user",
         email: "email@mail.com",
         password: "StrongPassword1234"
@@ -30,13 +32,15 @@ describe("Given a fresh Server", () => {
     test("Then the server should respond with 201", () => {
       expect(postResponse.status).toBe(201);
     });
-    test("Then the response should have a cookie with a sessionID", () => {
-      expect(postResponse.headers["set-cookie"][0]).toMatch(/notes-session=[0-9a-f]{128};/);
+    xtest("Then the response should contain the username", () => {
+      expect(postResponse.body.username).toBe("user");
     });
     describe("When another request comes with the same username", () => {
       let postResponse2: request.Response;
+      let otherAgent: supertest.SuperAgentTest;
       beforeEach(async () => {
-        postResponse2 = await supertest(server).post("/register").query({
+        otherAgent = supertest.agent(server);
+        postResponse2 = await otherAgent.post("/register").query({
           username: "user",
           email: "email@mail.com",
           password: "StrongPassword1234"
@@ -52,7 +56,7 @@ describe("Given a fresh Server", () => {
     describe("When a POST is missing username and sent to /register", () => {
       let postResponse: request.Response;
       beforeEach(async () => {
-        postResponse = await supertest(server).post("/register").query({
+        postResponse = await agent.post("/register").query({
           user: "user",
           email: "email@mail.com",
           password: "StrongPassword1234"
@@ -65,26 +69,26 @@ describe("Given a fresh Server", () => {
     describe("When a POST is missing password and sent to /register", () => {
       let postResponse: request.Response;
       beforeEach(async () => {
-        postResponse = await supertest(server).post("/register").query({
+        postResponse = await agent.post("/register").query({
           username: "user",
           email: "email@mail.com",
           pw: "StrongPassword1234"
         });
       });
-      test("Then the server should respond with 201", () => {
+      test("Then the server should respond with 400", () => {
         expect(postResponse.status).toBe(400);
       });
     });
     describe("When a POST is missing email and sent to /register", () => {
       let postResponse: request.Response;
       beforeEach(async () => {
-        postResponse = await supertest(server).post("/register").query({
+        postResponse = await agent.post("/register").query({
           username: "user",
           e: "email@mail.com",
           password: "StrongPassword1234"
         });
       });
-      test("Then the server should respond with 201", () => {
+      test("Then the server should respond with 400", () => {
         expect(postResponse.status).toBe(400);
       });
     });
