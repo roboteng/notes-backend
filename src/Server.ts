@@ -26,6 +26,22 @@ function makeServer(db: Database<number | string>) {
   app.use(passport.session());
 
   app.use("/register", RegisterRouter(db));
+  app.post("/login", (req, res, next) => {
+    passport.authenticate("local",
+      (err, user, info) => {
+        console.log(err, user, info);
+        if (err || info?.message === "Missing credentials") {
+          res.status(400).send();
+        } else {
+          if (user) {
+            res.status(201).send();
+          } else {
+            res.status(401).send();
+          }
+        }
+      }
+    )(req, res, next);
+  });
   app.use("/login", LoginRouter(db));
   app.use("/logout", LogoutRouter());
 
