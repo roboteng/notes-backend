@@ -1,32 +1,29 @@
 import { Request, Router } from "express";
-import { Database } from "../database/interface";
-import hashPassword from "../utils/hashPassword";
+import passport from "passport";
 
 interface LoginQuery {
   username: string,
   password: string,
 }
 
-function LoginRouter(db: Database<number | string>): Router {
+function LoginRouter(): Router {
   const router = Router();
 
   router.post("/", async (req: Request<unknown, unknown, unknown, LoginQuery>, res) => {
-    if (req.query.username) {
-      const data = await db.getUserHashAndSalt(req.query.username);
-      if (data !== null) {
-        const { hash: correctHash, salt } = data;
-        const possibleHash = hashPassword(req.query.password, salt);
-        if (correctHash === possibleHash) {
-          res.status(201).send();
+    passport.authenticate("local",
+      (err, user, info) => {
+        console.log(err, user, info);
+        if (err || info?.message === "Missing credentials") {
+          res.status(400).send();
         } else {
-          res.status(401).send();
+          if (user) {
+            res.status(201).send();
+          } else {
+            res.status(401).send();
+          }
         }
-      } else {
-        res.status(401).send();
       }
-    } else {
-      res.status(400).send();
-    }
+    )(req, res);
   });
 
   return router;
