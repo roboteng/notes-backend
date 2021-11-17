@@ -1,12 +1,5 @@
-import User from "../models/User";
+import AuthUser from "../models/AuthUser";
 import { Database } from "./interface";
-
-interface AuthUser extends User {
-  email: string,
-  hash: string,
-  salt: string,
-  id: number,
-}
 
 interface Session {
   userId: number,
@@ -14,7 +7,7 @@ interface Session {
 }
 
 function InMemoryDB(): Database<number> {
-  const users: AuthUser[] = [];
+  const users: AuthUser<number>[] = [];
   const sessions: Session[] = [];
   return {
     registerUser: async (username: string, hash: string, salt: string, email: string) => {
@@ -27,14 +20,15 @@ function InMemoryDB(): Database<number> {
     },
     getUser: async (userId: number) => {
       const user = users.filter(u => u.id = userId)[0];
-      return user as User;
+      return user;
     },
     getUserHashAndSalt: async (username: string) => {
-      const result = users.filter((user) => user.username === username)[0];
-      if (result) {
+      const user = users.find((user) => user.username === username);
+      if (user) {
         return {
-          hash: result.hash,
-          salt: result.salt,
+          hash: user.hash,
+          salt: user.salt,
+          user,
         };
       } else {
         return null;
