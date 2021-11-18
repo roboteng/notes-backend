@@ -19,7 +19,10 @@ function LoginRouter(): Router {
           res.status(400).send();
         } else {
           if (user) {
-            res.status(201).send();
+            req.login(user, (err) => {
+              if (err) console.error(err);
+              res.status(201).send();
+            });
           } else {
             res.status(401).send();
           }
