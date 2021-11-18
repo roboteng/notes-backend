@@ -38,6 +38,20 @@ describe("Given an unauthenticated user", () => {
       test("Then the server should provide the content", () => {
         expect(notesResponse.status).toBe(200);
       });
+      describe("When the user logs out and goes to /notes", () => {
+        let notesResponse: Response;
+        beforeEach(async () => {
+          await agent
+            .post("/logout")
+            .query({});
+          notesResponse = await agent
+            .get("/notes")
+            .query({});
+        });
+        test("Then the server should respond with 401", () => {
+          expect(notesResponse.status).toBe(401);
+        });
+      });
     });
   });
 });
