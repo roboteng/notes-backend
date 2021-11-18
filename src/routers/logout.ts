@@ -6,6 +6,7 @@ function LogoutRouter() {
   router.post("/", (req, res) => {
     const session: string = req.cookies["connect.sid"];
     if (session) {
+      req.logout();
       res.status(200).send();
     } else {
       res.status(400).send();
