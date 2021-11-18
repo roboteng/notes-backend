@@ -29,7 +29,7 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         const user = await db.getUser(userId);
         req.login(user, (err) => {
           if (err) console.error(err);
-          res.status(201).send(user);
+          res.status(201).send({ username: user.username, email: user.email, id: user.id });
         });
       }
     } else {

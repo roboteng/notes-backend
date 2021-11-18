@@ -32,8 +32,9 @@ describe("Given a fresh Server", () => {
     test("Then the server should respond with 201", () => {
       expect(postResponse.status).toBe(201);
     });
-    xtest("Then the response should contain the username", () => {
+    test("Then the response should contain the user information", () => {
       expect(postResponse.body.username).toBe("user");
+      expect(postResponse.body.email).toBe("email@mail.com");
     });
     describe("When another request comes with the same username", () => {
       let postResponse2: request.Response;
