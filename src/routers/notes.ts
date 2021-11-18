@@ -1,14 +1,18 @@
 import { Router } from "express";
 
+function authenticate(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.status(401).send();
+  } else {
+    next();
+  }
+}
+
 function NotesRouter() {
   const router = Router();
 
-  router.get("/", (req, res) => {
-    if (req.isAuthenticated()) {
-      res.status(200).send();
-    } else {
-      res.status(401).send();
-    }
+  router.get("/", authenticate, (req, res) => {
+    res.status(200).send();
   });
 
   return router;
