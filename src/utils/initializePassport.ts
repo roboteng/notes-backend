@@ -28,7 +28,7 @@ export default function initializePassport<K extends number | string>(db: Databa
     new Strategy(authenticateUser),
   );
 
-  passport.serializeUser((user: AuthUser<K>) => user.id);
-  passport.deserializeUser(async (userId: K) => db.getUser(userId));
+  passport.serializeUser((user: AuthUser<K>, cb) => cb(null, user.id));
+  passport.deserializeUser(async (userId: K, cb) => cb(null, db.getUser(userId)));
 
 }

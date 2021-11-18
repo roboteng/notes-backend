@@ -27,7 +27,10 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         const hash = hashPassword(req.query.password, salt);
         const userId = await db.registerUser(req.query.username, hash, salt, req.query.email);
         const user = await db.getUser(userId);
-        res.status(201).send(user);
+        req.login(user, (err) => {
+          if (err) console.error(err);
+          res.status(201).send(user);
+        });
       }
     } else {
       res.status(400).send();

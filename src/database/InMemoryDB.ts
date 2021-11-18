@@ -19,7 +19,7 @@ function InMemoryDB(): Database<number> {
       return users.some(user => user.username === username);
     },
     getUser: async (userId: number) => {
-      const user = users.filter(u => u.id = userId)[0];
+      const user = users.find(u => u.id === userId);
       return user;
     },
     getUserHashAndSalt: async (username: string) => {

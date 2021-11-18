@@ -25,8 +25,14 @@ function makeServer(db: Database<number | string>) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  app.use((req, res, next) => {
+    console.log("user", req.user);
+    console.log("logged in?", req.isAuthenticated());
+    next();
+  });
+
   app.use("/register", RegisterRouter(db));
-  app.use("/login", LoginRouter(db));
+  app.use("/login", LoginRouter());
   app.use("/logout", LogoutRouter());
 
   app.get("/", (req, res) => {

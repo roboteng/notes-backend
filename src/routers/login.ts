@@ -12,7 +12,6 @@ function LoginRouter(): Router {
   router.post("/", async (req: Request<unknown, unknown, unknown, LoginQuery>, res) => {
     passport.authenticate("local",
       (err, user, info) => {
-        console.log(err, user, info);
         if (err || info?.message === "Missing credentials") {
           res.status(400).send();
         } else {
