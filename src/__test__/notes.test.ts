@@ -21,5 +21,23 @@ describe("Given an unauthenticated user", () => {
     test("Then the server should respond with 401", () => {
       expect(notesResponse.status).toBe(401);
     });
+    describe("When the user registers and goes to /notes", () => {
+      let notesResponse: Response;
+      beforeEach(async () => {
+        await agent
+          .post("/register")
+          .query({
+            username: "user",
+            email: "email@mail.com",
+            password: "StrongPassword1234",
+          });
+        notesResponse = await agent
+          .get("/notes")
+          .query({});
+      });
+      test("Then the server should provide the content", () => {
+        expect(notesResponse.status).toBe(200);
+      });
+    });
   });
 });

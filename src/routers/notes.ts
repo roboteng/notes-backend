@@ -4,7 +4,11 @@ function NotesRouter() {
   const router = Router();
 
   router.get("/", (req, res) => {
-    res.status(401).send();
+    if (req.isAuthenticated()) {
+      res.status(200).send();
+    } else {
+      res.status(401).send();
+    }
   });
 
   return router;
