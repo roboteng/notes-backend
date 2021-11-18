@@ -1,12 +1,5 @@
 import { Router } from "express";
-
-function authenticate(req, res, next) {
-  if (!req.isAuthenticated()) {
-    res.status(401).send();
-  } else {
-    next();
-  }
-}
+import authenticate from "./middleware/authenticate";
 
 function NotesRouter() {
   const router = Router();
