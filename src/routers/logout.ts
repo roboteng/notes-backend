@@ -6,10 +6,9 @@ function LogoutRouter() {
   router.post("/", (req, res) => {
     if (req.isAuthenticated()) {
       req.logout();
-      res.status(200).send();
-    } else {
-      res.status(400).send();
     }
+    res.status(200).send();
+
   });
 
   return router;

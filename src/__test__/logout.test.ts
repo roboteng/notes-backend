@@ -11,18 +11,18 @@ describe("Given a fresh Server", () => {
     server = makeServer(InMemoryDB());
     agent = supertest.agent(server);
   });
-  describe("When a blank POST is sent to /logout", () => {
+  describe("When an unknown user logs out", () => {
     let postResponse: request.Response;
     beforeEach(async () => {
       postResponse = await agent.post("/logout");
     });
-    test("Then the server should respond with 400", () => {
-      expect(postResponse.status).toBe(400);
+    test("Then the server should respond with 200", () => {
+      expect(postResponse.status).toBe(200);
     });
   });
 });
 
-describe("Given a server with one logged in user", () => {
+describe("Given the user is logged in", () => {
   let server: express.Express;
   let agent: supertest.SuperAgentTest;
   beforeEach(async () => {
