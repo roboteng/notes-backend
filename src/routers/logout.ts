@@ -4,8 +4,7 @@ function LogoutRouter() {
   const router = Router();
 
   router.post("/", (req, res) => {
-    const session: string = req.cookies["connect.sid"];
-    if (session) {
+    if (req.isAuthenticated()) {
       req.logout();
       res.status(200).send();
     } else {
