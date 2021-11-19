@@ -1,5 +1,4 @@
 import express from "express";
-import cookieParer from "cookie-parser";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
@@ -15,8 +14,6 @@ function makeServer(db: Database<number | string>) {
   initializePassport(db, passport);
 
   const app = express();
-  app.use(express.json());
-  app.use(cookieParer());
   app.use(cors());
   app.use(session({
     secret: "secret",

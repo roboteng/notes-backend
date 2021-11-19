@@ -4,8 +4,8 @@ import { Response } from "superagent";
 import InMemoryDB from "../database/InMemoryDB";
 import makeServer from "../Server";
 
-function postNote(agent: SuperAgentTest, args: Record<string, unknown>) {
-  return agent.post("/notes").query(args);
+function postNote(agent: SuperAgentTest, name: string, body: string) {
+  return agent.post("/notes").query({ name }).send(body);
 }
 
 describe("Given an authenticated user", () => {
@@ -37,13 +37,30 @@ describe("Given an authenticated user", () => {
     describe("When the user posts a new note", () => {
       let postResponse: Response;
       beforeEach(async () => {
-        postResponse = await postNote(agent, {
-          name: "Note Name",
-          body: "This is a note",
-        });
+        postResponse = await postNote(
+          agent,
+          "Note Name",
+          "This is a note",
+        );
       });
       test("Then the serve should respond with 201", () => {
         expect(postResponse.statusCode).toBe(201);
+      });
+      test("Then the response shouldn't contain anything else", () => {
+        expect(postResponse.body).toEqual({});
+      });
+    });
+    describe("When the user posts a new note without a name", () => {
+      let postResponse: Response;
+      beforeEach(async () => {
+        postResponse = await postNote(
+          agent,
+          undefined,
+          "This is a note",
+        );
+      });
+      test("Then the serve should respond with 400", () => {
+        expect(postResponse.statusCode).toBe(400);
       });
       test("Then the response shouldn't contain anything else", () => {
         expect(postResponse.body).toEqual({});
