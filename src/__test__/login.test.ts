@@ -4,7 +4,7 @@ import request, { Response } from "superagent";
 import InMemoryDB from "../database/InMemoryDB";
 import makeServer from "../Server";
 
-describe("Given a server with one user", () => {
+describe("Given the user just registered", () => {
   let server: express.Express;
   let agent: SuperAgentTest;
   beforeEach(async () => {
@@ -26,8 +26,8 @@ describe("Given a server with one user", () => {
           password: "StrongPassword1234"
         });
     });
-    test("Then the server should respond with 400", () => {
-      expect(loginResponse.status).toBe(400);
+    test("Then the server should respond with 201", () => {
+      expect(loginResponse.status).toBe(201);
     });
   });
   describe("When the user logs out", () => {
