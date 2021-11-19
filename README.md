@@ -58,14 +58,31 @@ Registers a new user, and logs that user in
 
 ```json
 {
-  success: bool,
+  username: string,
+  email: string,
 }
 ```
 
-and a cookie with a session id
+### `/login`
+
+#### POST
+
+Logs in an existing user
+
+##### Request parameters
+
+| Parameter | Type   |
+|-----------|--------|
+| username  | string |
+| password  | string |
+
+##### Response
+
+201
 
 ```json
 {
-  notesSession: string,
+  username: string,
+  email: string,
 }
 ```

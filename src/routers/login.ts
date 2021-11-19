@@ -21,7 +21,10 @@ function LoginRouter(): Router {
           if (user) {
             req.login(user, (err) => {
               if (err) console.error(err);
-              res.status(201).send();
+              res.status(201).send({
+                username: user.username,
+                email: user.email,
+              });
             });
           } else {
             res.status(401).send();

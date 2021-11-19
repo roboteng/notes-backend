@@ -68,6 +68,10 @@ describe("Given a server with one user", () => {
       test("Then the server responds with 201", () => {
         expect(loginResponse.status).toBe(201);
       });
+      test("Then the server gives the username and email", () => {
+        expect(loginResponse.body.username).toBe("user");
+        expect(loginResponse.body.email).toBe("email@mail.com");
+      });
     });
   });
 });
