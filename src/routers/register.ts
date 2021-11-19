@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router, Request, response } from "express";
 import { Database } from "../database/interface";
 import randomHex from "../utils/randomHex";
 import hashPassword from "../utils/hashPassword";
@@ -30,7 +30,7 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         const user = await db.getUser(userId);
         req.login(user, (err) => {
           if (err) console.error(err);
-          res.status(201).send(user as User);
+          res.status(201).send(new User(user.username, user.email));
         });
       }
     } else {

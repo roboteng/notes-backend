@@ -36,6 +36,11 @@ describe("Given a fresh Server", () => {
       expect(postResponse.body.username).toBe("user");
       expect(postResponse.body.email).toBe("email@mail.com");
     });
+    test("Then the response shouldn't leak the id, hash, or salt", () => {
+      expect(postResponse.body.hash).toBeUndefined();
+      expect(postResponse.body.salt).toBeUndefined();
+      expect(postResponse.body.id).toBeUndefined();
+    });
     describe("When another request comes with the same username", () => {
       let postResponse2: request.Response;
       let otherAgent: supertest.SuperAgentTest;
