@@ -2,6 +2,7 @@ import { Router, Request } from "express";
 import { Database } from "../database/interface";
 import randomHex from "../utils/randomHex";
 import hashPassword from "../utils/hashPassword";
+import User from "../models/User";
 
 interface RegisterQuery {
   username: string,
@@ -29,7 +30,7 @@ function RegisterRouter<Key extends number | string>(db: Database<Key>) {
         const user = await db.getUser(userId);
         req.login(user, (err) => {
           if (err) console.error(err);
-          res.status(201).send({ username: user.username, email: user.email, id: user.id });
+          res.status(201).send(user as User);
         });
       }
     } else {

@@ -1,5 +1,6 @@
 import { Request, Router } from "express";
 import passport from "passport";
+import User from "../models/User";
 
 interface LoginQuery {
   username: string,
@@ -18,10 +19,10 @@ function LoginRouter(): Router {
           if (user) {
             req.login(user, (err) => {
               if (err) console.error(err);
-              res.status(201).send({
-                username: user.username,
-                email: user.email,
-              });
+              res.status(201).send(new User(
+                user.username,
+                user.email,
+              ));
             });
           } else {
             res.status(401).send();
