@@ -8,7 +8,6 @@ function LogoutRouter() {
       req.logout();
     }
     res.status(200).send();
-
   });
 
   return router;

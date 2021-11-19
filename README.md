@@ -22,6 +22,14 @@ To run all test files through Jest, and generate a coverage report, run
 
 To start the server, run `npm start`.
 
+## Authenticaion state
+
+The server keeps track of users and authentication with session cookies.
+When a user first contacts the server, it asks the client to store a `connect.sid` cookie.
+Every subsequent response to the server should have this session cookie, so it knows what user its talking to.
+This means that after logging in, the client only needs to send the cookie (which should happen by default),
+back to the server, and doesn't need to keep sending the username/password combination.
+
 ## Routes
 
 ### `/`
@@ -67,7 +75,7 @@ Registers a new user, and logs that user in
 
 #### POST
 
-Logs in an existing user
+Logs in an existing user, even if the user is already logged in
 
 ##### Request parameters
 
@@ -86,3 +94,17 @@ Logs in an existing user
   email: string,
 }
 ```
+
+### `/lgout`
+
+#### POST
+
+Ensures that the user is logged out.  If the user is logged in, they are logged out. If the user was already logged out, then nothing happens.
+
+##### Request parameters
+
+None
+
+##### Response
+
+200
