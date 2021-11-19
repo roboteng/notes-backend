@@ -5,7 +5,7 @@ import InMemoryDB from "../database/InMemoryDB";
 import makeServer from "../Server";
 
 function postNote(agent: SuperAgentTest, name: string, body: string) {
-  return agent.post("/notes").query({ name }).send(body);
+  return agent.post("/notes").query({ name }).type("text").send(body);
 }
 
 describe("Given an authenticated user", () => {
@@ -48,6 +48,20 @@ describe("Given an authenticated user", () => {
       });
       test("Then the response shouldn't contain anything else", () => {
         expect(postResponse.body).toEqual({});
+      });
+      describe("When the same user gets again", () => {
+        let notesResponse: Response;
+        beforeEach(async () => {
+          notesResponse = await agent.get("/notes");
+        });
+        test("Then the server should give the posted note", () => {
+          expect(notesResponse.body.notes).toEqual([
+            {
+              name: "Note Name",
+              body: "This is a note",
+            }
+          ]);
+        });
       });
     });
     describe("When the user posts a new note without a name", () => {

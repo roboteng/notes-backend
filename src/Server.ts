@@ -14,6 +14,7 @@ function makeServer(db: Database<number | string>) {
   initializePassport(db, passport);
 
   const app = express();
+  app.use(express.text());
   app.use(cors());
   app.use(session({
     secret: "secret",
