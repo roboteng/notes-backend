@@ -5,7 +5,11 @@ function NotesRouter() {
   const router = Router();
 
   router.get("/", authenticate, (req, res) => {
-    res.status(200).send();
+    res.send({ notes: [] });
+  });
+
+  router.post("/", authenticate, (req, res) => {
+    res.status(201).send();
   });
 
   return router;

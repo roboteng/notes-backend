@@ -1,4 +1,4 @@
-import { Router, Request, response } from "express";
+import { Router, Request } from "express";
 import { Database } from "../database/interface";
 import randomHex from "../utils/randomHex";
 import hashPassword from "../utils/hashPassword";
