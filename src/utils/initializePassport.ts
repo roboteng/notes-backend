@@ -8,8 +8,9 @@ import hashPassword from "./hashPassword";
 export default function initializePassport<K extends number | string>(db: Database<K>, passport: PassportStatic) {
   async function authenticateUser(username: string, password: string, done: (e: Error, r: AuthUser<K> | boolean) => void) {
     try {
-      if (await db.userExists(username)) {
-        const { salt, hash, user } = await db.getUserHashAndSalt(username);
+      const result = await db.getUserHashAndSalt(username);
+      if (result) {
+        const { salt, hash, user } = result;
         const given = hashPassword(password, salt);
         if (given === hash) {
           done(null, user);
