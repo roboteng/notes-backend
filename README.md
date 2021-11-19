@@ -56,7 +56,7 @@ Registers a new user, and logs that user in
 
 201
 
-```json
+```typescript
 {
   username: string,
   email: string,
@@ -80,7 +80,7 @@ Logs in an existing user
 
 201
 
-```json
+```typescript
 {
   username: string,
   email: string,
