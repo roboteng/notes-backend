@@ -14,6 +14,12 @@ function makeServer(db: Database<number | string>) {
   initializePassport(db, passport);
 
   const app = express();
+
+  app.use((req, res, next) => {
+    console.log(`Got ${req.method} at ${req.url}`);
+    next();
+  });
+
   app.use(express.text());
   app.use(cors());
   app.use(session({

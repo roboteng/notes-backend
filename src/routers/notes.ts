@@ -17,7 +17,11 @@ function NotesRouter() {
   const router = Router();
 
   router.get("/", authenticate, (req, res) => {
-    res.send({ notes });
+    res.send({
+      notes: notes.map((note, i) => {
+        return { ...note, id: i };
+      })
+    });
   });
 
   router.post("/", authenticate, (req: Request<unknown, unknown, string, NewNoteQuery>, res) => {

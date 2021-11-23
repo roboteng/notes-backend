@@ -55,12 +55,9 @@ describe("Given an authenticated user", () => {
           notesResponse = await agent.get("/notes");
         });
         test("Then the server should give the posted note", () => {
-          expect(notesResponse.body.notes).toEqual([
-            {
-              name: "Note Name",
-              body: "This is a note",
-            }
-          ]);
+          expect(notesResponse.body.notes[0].name).toBe("Note Name");
+          expect(notesResponse.body.notes[0].body).toBe("This is a note");
+          expect(notesResponse.body.notes[0].id).not.toBeUndefined();
         });
       });
     });
